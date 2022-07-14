@@ -3,6 +3,7 @@ use anyhow::Result;
 use wasi;
 
 fn main() -> Result<()> {
+    // extract the dir name passed to the program
     let mut args = env::args(); 
     let prog = args.next().unwrap();
     let arg = if let Some(arg) = args.next() {
@@ -31,12 +32,14 @@ fn main() -> Result<()> {
 
             dst.set_len(stat.u.dir.pr_name_len);
 
+            // compare the name returned from the file descriptor with the name passed to the
+            // program. Should be exactly the same
             if dst == arg.as_bytes() { 
                 println!("arg: {:?}\ndst: {:?}", arg.as_bytes(), dst);
                 println!("Wasmtime used");
             } else {  
                 if i == 3 {
-                    continue; // fd=3 is reserved for the root, we skip that and start from fd=4
+                    continue; // fd=3 is reserved for the root dir in wasmer, we skip that and start from fd=4
                 }
                 println!("arg: {:?}\ndst: {:?}", arg.as_bytes(), dst);
                 println!("Wasmer used");
