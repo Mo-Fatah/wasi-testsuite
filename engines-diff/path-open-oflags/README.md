@@ -8,5 +8,5 @@ This simple piece of code uses the `path_open` function with the parameter `ofla
 - Run with `wasmer` by `wasmer run --dir test_dir target/wasm32-wasi/debug/path-open-oflags.wasm test_dir`
 - Run with `wasmtime` by `wasmtime --dir test_dir target/wasm32-wasi/debug/path-open-oflags.wasm test_dir`
 
-With `wasmtime`, the test will fail since `wasmtime` returns `Ok()`, which is (I suppose) not a correct behavior.
+With `wasmtime`, the test will fail since `wasmtime` returns `Ok()`. 
 
