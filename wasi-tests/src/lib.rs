@@ -11,7 +11,7 @@ pub fn print_succ(message: String) {
     println!("{}", format!("\x1b[92m{}\x1b[0m", message));
 }
 pub fn print_warning(message: String) {
-    println!("{}", format!("\x1b[93m{}\x1b[0m", message));
+    println!("\n{}", format!("\x1b[93m{}\x1b[0m", message));
 }
 
 /// Opens a fresh file descriptor for `path` where `path` should be a preopened
@@ -23,7 +23,7 @@ pub fn open_scratch_directory(path: &str) -> Result<wasi::Fd, String> {
                 Ok(s) => s,
                 Err(_) => break,
             };
-            // check that it is a dir
+            // check that it is a directory
             if stat.tag != 0 {
                 continue;
             }
@@ -89,3 +89,4 @@ pub fn engine_command(engine_params: Vec<&str>, module: &str, module_params: Vec
 
     command
 }
+
