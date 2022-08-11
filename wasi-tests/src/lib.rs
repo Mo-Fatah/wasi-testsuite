@@ -5,7 +5,7 @@ use std::{
 use wasi;
 
 pub fn print_err(message: String) {
-    eprintln!("{}", format!("\x1b[91m{}\x1b[0m", message));
+    eprintln!("\n{}", format!("\x1b[91m{}\x1b[0m", message));
 }
 pub fn print_succ(message: String) {
     println!("{}", format!("\x1b[92m{}\x1b[0m", message));
@@ -89,4 +89,3 @@ pub fn engine_command(engine_params: Vec<&str>, module: &str, module_params: Vec
 
     command
 }
-
