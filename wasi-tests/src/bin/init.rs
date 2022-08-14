@@ -28,6 +28,11 @@ fn main() {
     }
     tests_count += 1;
 
+    if !fd_filestat_get_test().success() {
+        failed_test_cases += 1;
+    }
+    tests_count += 1;
+
     if failed_test_cases == 0 {
         println!(
             "\ntest results: {}. {} failed, {} passed",
@@ -119,4 +124,32 @@ fn path_open_test() -> ExitStatus {
         .unwrap();
 
     path_open_result
+}
+
+fn fd_filestat_get_test() -> ExitStatus {
+    // make a directory to be used by the module
+    Command::new("mkdir").arg("scratch_dir").status().unwrap();
+
+    let mut fd_filestat_get_test = engine_command(
+        vec!["--dir", "scratch_dir"],
+        "fd_filestat_get.wasm",
+        vec!["scratch_dir"],
+    );
+
+    let fd_filestat_get_result = match fd_filestat_get_test.status() {
+        Ok(result) => result,
+        Err(e) => {
+            eprintln!("couldn't run the engine\n{:?}", e);
+            process::exit(1);
+        }
+    };
+
+    // remove the directory
+    Command::new("rm")
+        .arg("-rf")
+        .arg("scratch_dir")
+        .status()
+        .unwrap();
+
+    fd_filestat_get_result
 }

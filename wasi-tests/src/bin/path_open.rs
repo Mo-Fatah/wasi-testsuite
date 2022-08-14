@@ -12,7 +12,7 @@ unsafe fn test_file_doesnt_exist(dir_fd: wasi::Fd) -> u8 {
         Ok(_) => {
             print_err(">> trying to open a file that doesn't exist".to_string());
             return 1;
-        },
+        }
         Err(e) => {
             if e != wasi::ERRNO_NOENT {
                 print_err(format!(">> opening a file that doesn't exist should return ERRNO_NOENT\nFound: ERRNO_{:?}", e.name()));
@@ -238,7 +238,7 @@ fn main() -> ExitCode {
     print_warning("Testing path_open ...".to_string());
 
     unsafe {
-        if test_file_doesnt_exist(dir_fd) 
+        if test_file_doesnt_exist(dir_fd)
             + test_path_create(dir_fd)
             + test_path_exists(dir_fd)
             + test_path_fd_notdir(dir_fd)

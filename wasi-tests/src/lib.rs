@@ -16,6 +16,7 @@ pub fn print_warning(message: String) {
 
 /// Opens a fresh file descriptor for `path` where `path` should be a preopened
 /// directory.
+/// this function is from wasmtime's wasi-tests
 pub fn open_scratch_directory(path: &str) -> Result<wasi::Fd, String> {
     unsafe {
         for i in 3.. {
@@ -45,6 +46,7 @@ pub fn open_scratch_directory(path: &str) -> Result<wasi::Fd, String> {
     }
 }
 
+/// this function is from wasmtime's wasi-tests
 pub unsafe fn fd_get_rights(fd: wasi::Fd) -> (wasi::Rights, wasi::Rights) {
     let fdstat = wasi::fd_fdstat_get(fd).expect("fd_fdstat_get failed");
     (fdstat.fs_rights_base, fdstat.fs_rights_inheriting)
