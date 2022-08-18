@@ -8,8 +8,11 @@ use wasi_tests::{open_scratch_directory, print_err, print_succ, print_warning};
 /// simple directory creation
 unsafe fn test_path_create_directory(dir_fd: wasi::Fd) -> u8 {
     wasi::path_create_directory(dir_fd, "new_dir").expect("create a directory");
-    if let Err(e) =  wasi::path_open(dir_fd, 0, "new_dir", wasi::OFLAGS_DIRECTORY, 0, 0, 0) {
-        print_err(format!(">> couldn't open the new directory\nFound Error:{:?}", e));
+    if let Err(e) = wasi::path_open(dir_fd, 0, "new_dir", wasi::OFLAGS_DIRECTORY, 0, 0, 0) {
+        print_err(format!(
+            ">> couldn't open the new directory\nFound Error:{:?}",
+            e
+        ));
         return 1;
     }
 
@@ -25,14 +28,20 @@ unsafe fn test_directory_exist(dir_fd: wasi::Fd) -> u8 {
     // try to create it again
     match wasi::path_create_directory(dir_fd, "new_dir") {
         Ok(_) => {
-            print_err(">> creating a directory that already exists should return an error\n\
-                      Expected: Err()\nFound: Ok()".to_string());
+            print_err(
+                ">> creating a directory that already exists should return an error\n\
+                      Expected: Err()\nFound: Ok()"
+                    .to_string(),
+            );
             return 1;
-        },
+        }
         Err(e) => {
             if e != wasi::ERRNO_EXIST {
-                print_err(format!(">> creating a directory that already exists should return ERRNO_EXIST\n\
-                          Expected: ERRNO_EXIST\nFound: ERRNO_{}", e.name()));
+                print_err(format!(
+                    ">> creating a directory that already exists should return ERRNO_EXIST\n\
+                          Expected: ERRNO_EXIST\nFound: ERRNO_{}",
+                    e.name()
+                ));
                 return 1;
             }
         }
@@ -71,5 +80,4 @@ fn main() -> ExitCode {
             return ExitCode::FAILURE;
         }
     }
-    ExitCode::SUCCESS
 }
