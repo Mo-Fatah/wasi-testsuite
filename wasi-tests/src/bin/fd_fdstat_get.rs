@@ -57,7 +57,7 @@ unsafe fn test_directory_stat(dir_fd: wasi::Fd) -> u8 {
         dir_stat.fs_rights_inheriting, 0,
         "file should have fs_rights_inheriting 0"
     );
-    
+
     wasi::path_remove_directory(dir_fd, "new_dir").expect("trying to remove new_dir");
 
     0

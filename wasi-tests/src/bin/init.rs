@@ -43,6 +43,11 @@ fn main() {
     }
     tests_count += 1;
 
+    if !path_unlink_file_test().success() {
+        failed_test_cases += 1;
+    }
+    tests_count += 1;
+
     if failed_test_cases == 0 {
         println!(
             "\ntest results: {}. {} failed, {} passed",
@@ -218,4 +223,31 @@ fn fd_fdstat_get_test() -> ExitStatus {
         .unwrap();
 
     fd_fdstat_get_result
+}
+
+fn path_unlink_file_test() -> ExitStatus {
+    // make a directory to be used by the module
+    Command::new("mkdir").arg("scratch_dir").status().unwrap();
+
+    let mut path_unlink_file_test = engine_command(
+        vec!["--dir", "scratch_dir"],
+        "path_unlink_file.wasm",
+        vec!["scratch_dir"],
+    );
+
+    let path_unlink_file_result = match path_unlink_file_test.status() {
+        Ok(result) => result,
+        Err(e) => {
+            eprintln!("couldn't run the engine\n{:?}", e);
+            process::exit(1);
+        }
+    };
+    // remove the directory
+    Command::new("rm")
+        .arg("-rf")
+        .arg("scratch_dir")
+        .status()
+        .unwrap();
+
+    path_unlink_file_result
 }
