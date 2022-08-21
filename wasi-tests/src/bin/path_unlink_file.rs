@@ -49,9 +49,7 @@ unsafe fn unlink_multi_links(dir_fd: wasi::Fd) -> u8 {
     wasi::path_unlink_file(dir_fd, "file_link2").expect("trying to remove second link of file");
     match wasi::path_open(dir_fd, 0, "file_link2", 0, 0, 0, 0) {
         Ok(_) => {
-            print_err(
-                ">> opening a removed file should return an error. Found Ok()".to_string(),
-            );
+            print_err(">> opening a removed file should return an error. Found Ok()".to_string());
             return 1;
         }
         Err(e) => {

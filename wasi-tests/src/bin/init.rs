@@ -48,6 +48,11 @@ fn main() {
     }
     tests_count += 1;
 
+    if !fd_fdstat_set_rights_test().success() {
+        failed_test_cases += 1;
+    }
+    tests_count += 1;
+
     if failed_test_cases == 0 {
         println!(
             "\ntest results: {}. {} failed, {} passed",
@@ -250,4 +255,30 @@ fn path_unlink_file_test() -> ExitStatus {
         .unwrap();
 
     path_unlink_file_result
+}
+
+fn fd_fdstat_set_rights_test() -> ExitStatus {
+    Command::new("mkdir").arg("scratch_dir").status().unwrap();
+
+    let mut fd_fdstat_set_rights_test = engine_command(
+        vec!["--dir", "scratch_dir"],
+        "fd_fdstat_set_rights.wasm",
+        vec!["scratch_dir"],
+    );
+
+    let fd_fdstat_set_rights_result = match fd_fdstat_set_rights_test.status() {
+        Ok(result) => result,
+        Err(e) => {
+            eprintln!("couldn't run the engine\n{:?}", e);
+            process::exit(1);
+        }
+    };
+    // remove the directory
+    Command::new("rm")
+        .arg("-rf")
+        .arg("scratch_dir")
+        .status()
+        .unwrap();
+
+    fd_fdstat_set_rights_result
 }
