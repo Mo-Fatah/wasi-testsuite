@@ -11,7 +11,7 @@ unsafe fn test_regular_file_stat(dir_fd: wasi::Fd) -> u8 {
 
     let fd_stat = wasi::fd_fdstat_get(file_fd).expect("trying to get file fd_stat");
 
-    if fd_stat.fs_filetype.name() != "REGULAR_FILE" {
+    if fd_stat.fs_filetype != wasi::FILETYPE_REGULAR_FILE {
         print_err(format!(
             "file should have type REGULAR_FILE\nFound Type: {}",
             fd_stat.fs_filetype.name()
@@ -40,7 +40,7 @@ unsafe fn test_directory_stat(dir_fd: wasi::Fd) -> u8 {
         .expect("opening dir");
     let dir_stat = wasi::fd_fdstat_get(new_dir_fd).expect("trying to get new_dir stat");
 
-    if dir_stat.fs_filetype.name() != "DIRECTORY" {
+    if dir_stat.fs_filetype != wasi::FILETYPE_DIRECTORY {
         print_err(format!(
             "directory should have type DIRECTORY\nFound Type: {}",
             dir_stat.fs_filetype.name()
